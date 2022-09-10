@@ -28,5 +28,11 @@ dependencies {
 test {
     systemProperty('login', 'ya.osipova.sis+1@gmail.com')
     systemProperty('password', 'Test1!test')
+    systemProperty('browserName', 'edge')
+    systemProperty('page', 'https://otus.ru')
+    systemProperty('country', 'Украина')
+    systemProperty('city', 'Мариуполь')
+    systemProperty('typeCommunication1', 'Facebook')
+    systemProperty('typeCommunication2', 'Skype')
     useJUnitPlatform()
 }

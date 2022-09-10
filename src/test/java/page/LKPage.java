@@ -2,218 +2,198 @@ package page;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
-import util.Util;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
+import static data.Communication.getCommunication;
+import static java.lang.String.format;
 import static org.assertj.core.api.Assertions.assertThat;
+import static data.Value.*;
 
-public class LKPage {
-    private final WebDriver driver;
-
-    private static final By HEADER_MENU = By.xpath("/html/body/div[1]/div/header[2]/div/div[3]/div/div/div[1]");
-    private static final By HEADER_LK = By.xpath("/html/body/div[1]/div/header[2]/div/div[3]/div/div/div[1]/div[2]/a[2]");
-    private static final By BIOGRAPHY = By.xpath("/html/body/div[1]/div/div[2]/div/div/div/a[3]");
-    private static final By ID_FNAME = By.id("id_fname");
-    private static final By ID_FNAME_LATIN = By.id("id_fname_latin");
-    private static final By ID_LNAME = By.id("id_lname");
-    private static final By ID_LNAME_LATIN = By.id("id_lname_latin");
-    private static final By ID_BLOG_NAME = By.id("id_blog_name");
-    private static final By DATE_OF_BIRTH = By.xpath("//input[@name='date_of_birth']");
-    private static final By SELECTED_COUNTRY = By.xpath("//div[@data-slave-selector='.js-lk-cv-dependent-slave-city']");
-    private static final By COUNTRY = By.xpath("//button[@title='Украина']");
-    private static final By SELECTED_CITY = By.xpath("//div[@data-selected-option-class='lk-cv-block__select-option_selected']");
-    private static final By CITY = By.xpath("//button[@title='Мариуполь']");
-    private static final By SELECTED_LEVEL_LANGUAGE = By.xpath("//div[@data-selected-option-class='lk-cv-block__select-option_selected']");
-    private static final By LEVEL_LANGUAGE = By.xpath("//button[@title='Начальный уровень (Beginner)']");
-    private static final By SELECTED_RELOCATE = By.xpath("//span[@class='radio__label']");
-    private static final By WORK_FORMAT = By.xpath("/html/body/div[1]/div/div[4]/div[3]/div[2]/div[2]/div/form/div[1]/div[3]/div[1]/div/div[1]/div[5]/div[2]/div[1]/div[2]/label/span");
-    private static final By PREFERRED_COMMUNICATION_METHOD = By.xpath("/html/body/div[1]/div/div[4]/div[3]/div[2]/div[2]/div/form/div[1]/div[3]/div[2]/div[1]/div[2]/div/div[2]/div[2]/label/span");
-    private static final By SELECTED_COMMUNICATION_1 = By.xpath("/html/body/div[1]/div/div[4]/div[3]/div[2]/div[2]/div/form/div[1]/div[3]/div[2]/div[2]/div/div/div[1]/div/div/div");
-    private static final By ADD_COMMUNICATION_1 = By.xpath("/html/body/div[1]/div/div[4]/div[3]/div[2]/div[2]/div/form/div[1]/div[3]/div[2]/div[2]/div/div/div[1]/div/div/div/div/div/button[5]");
-    private static final By SET_VALUE_FOR_COMMUNICATION_1 = By.xpath("//*[@id='id_contact-0-value']");
-    private static final By ADD_COMMUNICATION = By.xpath("/html/body/div[1]/div/div[4]/div[3]/div[2]/div[2]/div/form/div[1]/div[3]/div[2]/div[2]/button");
-    private static final By SELECTED_COMMUNICATION_2 = By.xpath("/html/body/div[1]/div/div[4]/div[3]/div[2]/div[2]/div/form/div[1]/div[3]/div[2]/div[2]/div/div[2]/div[1]/div/div/div/label/div");
-    private static final By ADD_COMMUNICATION_2 = By.xpath("/html/body/div[1]/div/div[4]/div[3]/div[2]/div[2]/div/form/div[1]/div[3]/div[2]/div[2]/div/div[2]/div[1]/div/div/div/div/div/button[3]");
-    private static final By SET_VALUE_FOR_COMMUNICATION_2 = By.xpath("//*[@id='id_contact-1-value']");
-    private static final By SELECTED_GENDER = By.xpath("/html/body/div[1]/div/div[4]/div[3]/div[2]/div[2]/div/form/div[1]/div[4]/div[1]/div[1]/div");
-    private static final By SELECTED_WOMAN = By.xpath("//*[@id='id_gender']/option[3]");
-    private static final By SET_COMPANY = By.xpath("//*[@id='id_company']");
-    private static final By SET_JOB_TITLE = By.xpath("//*[@id='id_work']");
-    private static final By SAVE_PERSONAL_DATA = By.xpath("/html/body/div[1]/div/div[4]/div[3]/div[2]/div[2]/div/form/div[2]/div/div/button[1]");
-    private static final By CHECK_CHECKBOX = By.xpath("//*[@id='id_is_email_preferable']");
-    private static final By CHECK_DATE = By.xpath("/html/body/div[1]/div/div[4]/div[3]/div[2]/div[2]/div/form/div[1]/div[1]/div/div[4]/div/div/input");
-    private static final By CHECK_COUNTRY = By.xpath("/html/body/div[1]/div/div[4]/div[3]/div[2]/div[2]/div/form/div[1]/div[3]/div[1]/div/div[1]/div[1]/div[2]/div/label/div");
-    private static final By CHECK_CITY = By.xpath("/html/body/div[1]/div/div[4]/div[3]/div[2]/div[2]/div/form/div[1]/div[3]/div[1]/div/div[1]/div[2]/div[2]/div/label/div");
-    private static final By CHECK_LEVEL_LANGUAGE = By.xpath("/html/body/div[1]/div/div[4]/div[3]/div[2]/div[2]/div/form/div[1]/div[3]/div[1]/div/div[1]/div[3]/div[2]/div/label/div");
-    private static final By CHECK_RELOCATE = By.xpath("//*[@id='id_ready_to_relocate_1']");
-    private static final By CHECK_WORK_FORMAT = By.xpath("/html/body/div[1]/div/div[4]/div[3]/div[2]/div[2]/div/form/div[1]/div[3]/div[1]/div/div[1]/div[5]/div[2]/div[1]/div[2]/label/input");
-    private static final By CHECK_EMAIL = By.xpath("//*[@id='id_email']");
-    private static final By CHECK_COMMUNICATION_1 = By.xpath("/html/body/div[1]/div/div[4]/div[3]/div[2]/div[2]/div/form/div[1]/div[3]/div[2]/div[2]/div/div[1]/div[1]/div/div/div/label/div");
-    private static final By CHECK_COMMUNICATION_2 = By.xpath("/html/body/div[1]/div/div[4]/div[3]/div[2]/div[2]/div/form/div[1]/div[3]/div[2]/div[2]/div/div[2]/div[1]/div/div/div/label/div");
-    private static final String NAME = "Тест";
-    private static final String NAME_LATIN = "Test";
-    private static final String LNAME = "Тестов";
-    private static final String LNAME_LATIN = "Testov";
-    private static final String BLOG_NAME = "TestBlogov";
-    private static final String BIRTHDAY = "02.02.2002";
-    private static final String FIRST_COMMUNICATION = "test@mail.com";
-    private static final String SECOND_COMMUNICATION = "vk.com/test";
-    private static final String COMPANY = "SIS";
-    private static final String JOB_TITLE = "qa engineer";
-
-    public LKPage(WebDriver driver) {
-        this.driver = driver;
+public class LKPage extends LoginPage{
+    private static final String COUNTRY = System.getProperty("country");
+    private static final String CITY = System.getProperty("city");
+    public static final String TYPE_COMM_1 = System.getProperty("typeCommunication1");
+    public static final String COMMUNICATION_1 = getCommunication(TYPE_COMM_1);
+    public static final String TYPE_COMM_2 = System.getProperty("typeCommunication2");
+    public static final String COMMUNICATION_2 = getCommunication(TYPE_COMM_2);
+    public void learningPageWithBiography(WebDriver webDriver, WebDriverWait webDriverWait) {
+        userLogger.info("Вход на страничку о себе");
+        var action = new Actions(webDriver);
+        var form = webDriverWait
+                .until(ExpectedConditions
+                        .visibilityOfElementLocated(By.cssSelector("div.header2-menu__item.header2__right__menu__item.header2-menu__item_small.header2-menu__item_dropdown.header2-menu__item_dropdown_no-border")));
+        action.moveToElement(form).perform();
+        webDriverWait
+                .until(ExpectedConditions
+                        .visibilityOfElementLocated(By.cssSelector("a[title='Личный кабинет']")))
+                .click();
+        webDriverWait
+                .until(ExpectedConditions
+                        .visibilityOfElementLocated(By.cssSelector("a[title='О себе']"))).click();
     }
 
-    public void learningPageWithBiography() {
-        var action = new Actions(driver);
-        Util.waitSecond(2);
-        WebElement webElement = driver.findElement(HEADER_MENU);
-        action.moveToElement(webElement).perform();
-        driver.findElement(HEADER_LK).click();
-        Util.waitSecond(1);
-        driver.findElement(BIOGRAPHY).click();
-    }
-
-    public void setPersonalData() {
-        var element = driver.findElement(ID_FNAME);
+    public void setPersonalData(WebDriver webDriver, WebDriverWait webDriverWait) {
+        userLogger.info("Заполнение данных о себе");
+        var element = webDriver.findElement(By.id("id_fname"));
         element.clear();
-        element.sendKeys(NAME);
+        element.sendKeys(NAME.getValue());
 
-        element = driver.findElement(ID_FNAME_LATIN);
+        element = webDriver.findElement(By.id("id_fname_latin"));
         element.clear();
-        element.sendKeys(NAME_LATIN);
+        element.sendKeys(NAME_LATIN.getValue());
 
-        element = driver.findElement(ID_LNAME);
+        element = webDriver.findElement(By.id("id_lname"));
         element.clear();
-        element.sendKeys(LNAME);
+        element.sendKeys(LNAME.getValue());
 
-        element = driver.findElement(ID_LNAME_LATIN);
+        element = webDriver.findElement(By.id("id_lname_latin"));
         element.clear();
-        element.sendKeys(LNAME_LATIN);
+        element.sendKeys(LNAME_LATIN.getValue());
 
-        element = driver.findElement(ID_BLOG_NAME);
+        element = webDriver.findElement(By.id("id_blog_name"));
         element.clear();
-        element.sendKeys(BLOG_NAME);
+        element.sendKeys(BLOG_NAME.getValue());
 
-        element = driver.findElement(DATE_OF_BIRTH);
+        element = webDriver.findElement( By.xpath("//input[@name='date_of_birth']"));
         element.clear();
-        element.sendKeys(BIRTHDAY);
+        element.sendKeys(BIRTHDAY.getValue());
 
-        driver.findElement(SELECTED_COUNTRY).click();
-        driver.findElement(COUNTRY).click();
+        webDriver.findElement(By.xpath("//div[@data-slave-selector='.js-lk-cv-dependent-slave-city']"))
+                .click();
+        webDriverWait
+                .until(ExpectedConditions
+                        .visibilityOfElementLocated(By.xpath(format("//button[@title='%s']", COUNTRY))))
+                .click();
 
-        Util.waitSecond(3);
+        webDriverWait.until(ExpectedConditions.elementToBeClickable(By.xpath("//span[@class='placeholder']")))
+                .click();
+        webDriverWait.until(ExpectedConditions
+                        .visibilityOfElementLocated(By.xpath(format("//button[@title='%s']", CITY))))
+                .click();
+        webDriver.findElements(By.xpath("//div[@data-selected-option-class='lk-cv-block__select-option_selected']")).get(2).click();
+        webDriver.findElement(By.xpath("//button[@title='Начальный уровень (Beginner)']")).click();
 
-        driver.findElements(SELECTED_CITY).get(1).click();
-        driver.findElement(CITY).click();
-
-        driver.findElements(SELECTED_LEVEL_LANGUAGE).get(2).click();
-        driver.findElement(LEVEL_LANGUAGE).click();
-
-        driver.findElements(SELECTED_RELOCATE)
+        webDriver.findElements(By.xpath("//span[@class='radio__label']"))
                 .get(1)
                 .click();
-        driver.findElement(WORK_FORMAT)
-                .click();
 
-        if (!driver.findElement(CHECK_CHECKBOX)
-                .getAttribute("checked").equalsIgnoreCase("true")) {
-            driver.findElement(PREFERRED_COMMUNICATION_METHOD)
+        if (!webDriver.findElement(By.xpath("//input[@title='Полный день' and @checked]")).getAttribute("checked").equalsIgnoreCase("true")) {
+            webDriver.findElement(By.xpath("//span[contains(text(), 'Полный день')]"))
                     .click();
         }
+        if (!webDriver.findElement(By.xpath("//*[@id='id_is_email_preferable']"))
+                .getAttribute("checked").equalsIgnoreCase("true")) {
+            webDriver.findElements(By.xpath("//span[contains(text(), 'Предпочтительный способ связи')]"))
+                    .get(0)
+                    .click();
+        }
+        var elements = webDriver.findElements(By.xpath("//button[contains(text(), 'Удалить')]"));
+        for (int i = 0; i < elements.size(); i += 2) {
+            webDriverWait.until(ExpectedConditions.elementToBeClickable(elements.get(i)))
+                    .click();
+        }
+        webDriver.findElement(By.xpath("//button[contains(text(), 'Добавить')]"))
+                .click();
+        webDriver.findElement(By.xpath("//span[contains(text(), 'Способ связи')]"))
+                .click();
+        webDriver.findElements(By.xpath(format("//button[contains(text(), '%s')]", TYPE_COMM_1))).get(2).click();
+        element = webDriver.findElement(By.xpath("//*[@id='id_contact-2-value']"));
+        element.sendKeys(COMMUNICATION_1);
 
-        driver.findElement(SELECTED_COMMUNICATION_1)
+        webDriver.findElement(By.xpath("//button[contains(text(), 'Добавить')]"))
                 .click();
-        driver.findElement(ADD_COMMUNICATION_1)
+        webDriver.findElement(By.xpath("//span[contains(text(), 'Способ связи')]"))
                 .click();
-        element = driver.findElement(SET_VALUE_FOR_COMMUNICATION_1);
+        webDriver.findElements(By.xpath(format("//button[contains(text(), '%s')]", TYPE_COMM_2))).get(3).click();
+        element = webDriver.findElement(By.xpath("//*[@id='id_contact-3-value']"));
+        element.sendKeys(COMMUNICATION_2);
+
+        webDriver.findElement(By.xpath("//div[@class='select select_full']"))
+                .click();
+        webDriver.findElement(By.xpath("//*[@id='id_gender']/option[@value='f']"))
+                .click();
+
+        element = webDriver.findElement(By.xpath("//*[@id='id_company']"));
         element.clear();
-        element.sendKeys(FIRST_COMMUNICATION);
+        element.sendKeys(COMPANY.getValue());
 
-        driver.findElement(ADD_COMMUNICATION)
-                .click();
-        driver.findElement(SELECTED_COMMUNICATION_2)
-                .click();
-        driver.findElement(ADD_COMMUNICATION_2)
-                .click();
-        element = driver.findElement(SET_VALUE_FOR_COMMUNICATION_2);
+        element = webDriver.findElement(By.xpath("//*[@id='id_work']"));
         element.clear();
-        element.sendKeys(SECOND_COMMUNICATION);
+        element.sendKeys(JOB_TITLE.getValue());
 
-        driver.findElement(SELECTED_GENDER)
-                .click();
-        driver.findElement(SELECTED_WOMAN)
-                .click();
-
-        element = driver.findElement(SET_COMPANY);
-        element.clear();
-        element.sendKeys(COMPANY);
-
-        element = driver.findElement(SET_JOB_TITLE);
-        element.clear();
-        element.sendKeys(JOB_TITLE);
-
-        driver.findElement(SAVE_PERSONAL_DATA)
+        webDriver.findElement(By.xpath("//button[@title='Сохранить и продолжить']"))
                 .click();
     }
 
-    public void checkPersonalData() {
-        var text = driver.findElement(ID_FNAME).getAttribute("value");
-        assertThat(text).as("Name").isEqualTo(NAME);
-        text = driver.findElement(ID_FNAME_LATIN).getAttribute("value");
-        assertThat(text).as("Name(Latin)").isEqualTo(NAME_LATIN);
-        text = driver.findElement(ID_LNAME).getAttribute("value");
-        assertThat(text).as("Last Name").isEqualTo(LNAME);
-        text = driver.findElement(ID_LNAME_LATIN).getAttribute("value");
-        assertThat(text).as("Last Name(Latin)").isEqualTo(LNAME_LATIN);
-        text = driver.findElement(ID_BLOG_NAME).getAttribute("value");
-        assertThat(text).as("Blog name").isEqualTo(BLOG_NAME);
-        text = driver.findElement(CHECK_DATE)
+    public void checkPersonalData(WebDriver webDriver) {
+        var text = webDriver.findElement(By.id("id_fname")).getAttribute("value");
+        assertThat(text).as("Name").isEqualTo(NAME.getValue());
+
+        text = webDriver.findElement(By.id("id_fname_latin")).getAttribute("value");
+        assertThat(text).as("Name(Latin)").isEqualTo(NAME_LATIN.getValue());
+
+        text = webDriver.findElement(By.id("id_lname")).getAttribute("value");
+        assertThat(text).as("Last Name").isEqualTo(LNAME.getValue());
+
+        text = webDriver.findElement(By.id("id_lname_latin")).getAttribute("value");
+        assertThat(text).as("Last Name(Latin)").isEqualTo(LNAME_LATIN.getValue());
+
+        text = webDriver.findElement(By.id("id_blog_name")).getAttribute("value");
+        assertThat(text).as("Blog name").isEqualTo(BLOG_NAME.getValue());
+        text = webDriver.findElement(By.xpath("//input[@name='date_of_birth']"))
                 .getAttribute("value");
-        assertThat(text).as("Date").isEqualTo(BIRTHDAY);
-        text = driver.findElement(CHECK_COUNTRY)
+        assertThat(text).as("Date").isEqualTo(BIRTHDAY.getValue());
+
+        text = webDriver.findElement(By.xpath(format("//div[contains(text(), '%s')]", COUNTRY)))
                 .getText();
-        assertThat(text).as("Country").isEqualTo("Украина");
-        text = driver.findElement(CHECK_CITY)
+        assertThat(text).as("Country").isEqualTo(COUNTRY);
+
+        text = webDriver.findElement(By.xpath(format("//div[contains(text(), '%s')]", CITY)))
                 .getText();
-        assertThat(text).as("City").isEqualTo("Мариуполь");
-        text = driver.findElement(CHECK_LEVEL_LANGUAGE)
-                .getText();
-        assertThat(text).as("Level language").isEqualTo("Начальный уровень (Beginner)");
-        text = driver.findElement(CHECK_RELOCATE)
+        assertThat(text).as("City").isEqualTo(CITY);
+
+        text = webDriver.findElement(By.xpath("//input[@data-title='Уровень знания английского языка']"))
                 .getAttribute("value");
-        assertThat(text).as("CHECK_RELOCATE").isEqualTo("True");
-        text = driver.findElement(CHECK_WORK_FORMAT)
+        assertThat(text).as("Уровень знания английского языка").isEqualTo("1");
+        text = webDriver.findElement(By.xpath("//*[@id='id_ready_to_relocate_1']"))
+                .getAttribute("value");
+
+        assertThat(text).as("Checkbox").isEqualTo("True");
+        text = webDriver.findElement(By.xpath("//input[@title='Полный день']"))
                 .getAttribute("checked");
         assertThat(text).as("Checkbox").isEqualTo("true");
-        text = driver.findElement(CHECK_EMAIL)
+        text = webDriver.findElement(By.xpath("//*[@id='id_email']"))
                 .getAttribute("value");
-        assertThat(text).as("email").isEqualTo("ya.osipova.sis+1@gmail.com");
-        text = driver.findElement(CHECK_CHECKBOX)
+        assertThat(text).as("email").isEqualTo(System.getProperty("login"));
+        text = webDriver.findElement(By.xpath("//*[@id='id_is_email_preferable']"))
                 .getAttribute("checked");
         assertThat(text).as("Checkbox").isEqualTo("true");
-        text = driver.findElement(SET_VALUE_FOR_COMMUNICATION_1)
+
+        text = webDriver.findElement(By.xpath("//*[@id='id_contact-0-value']"))
                 .getAttribute("value");
-        assertThat(text).as("Skype").isEqualTo(FIRST_COMMUNICATION);
-        text = driver.findElement(CHECK_COMMUNICATION_1)
-                .getText();
-        assertThat(text).as("Skype").isEqualTo("Skype");
-        text = driver.findElement(SET_VALUE_FOR_COMMUNICATION_2)
+        assertThat(text).as("First Communication").isEqualTo(COMMUNICATION_1);
+        text = webDriver.findElement(By.xpath(format("//input[@value='%s']", TYPE_COMM_1.toLowerCase())))
                 .getAttribute("value");
-        assertThat(text).as("VK").isEqualTo(SECOND_COMMUNICATION);
-        text = driver.findElement(CHECK_COMMUNICATION_2)
-                .getText();
-        assertThat(text).as("VK").isEqualTo("VK");
-        text = driver.findElement(SELECTED_WOMAN)
+        assertThat(text).as("First Communication").isEqualTo(TYPE_COMM_1.toLowerCase());
+
+        text = webDriver.findElement(By.xpath("//*[@id='id_contact-1-value']"))
+                .getAttribute("value");
+        assertThat(text).as("Second Communication").isEqualTo(COMMUNICATION_2);
+        text = webDriver.findElement(By.xpath(format("//input[@value='%s']", TYPE_COMM_2.toLowerCase())))
+                .getAttribute("value");
+        assertThat(text).as("Second Communication").isEqualTo(TYPE_COMM_2.toLowerCase());
+
+        text = webDriver.findElement(By.xpath("//*[@id='id_gender']/option[@value='f']"))
                 .getAttribute("selected");
         assertThat(text).as("checkbox").isEqualTo("true");
-        text = driver.findElement(SET_COMPANY)
+        text = webDriver.findElement(By.xpath("//*[@id='id_company']"))
                 .getAttribute("value");
-        assertThat(text).as("Company").isEqualTo(COMPANY);
-        text = driver.findElement(SET_JOB_TITLE)
+        assertThat(text).as("Company").isEqualTo(COMPANY.getValue());
+        text = webDriver.findElement(By.xpath("//*[@id='id_work']"))
                 .getAttribute("value");
-        assertThat(text).as("Work").isEqualTo(JOB_TITLE);
+        assertThat(text).as("Work").isEqualTo(JOB_TITLE.getValue());
+        userLogger.info("Конец теста 2");
     }
 }
